@@ -23,7 +23,10 @@ import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
+
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -42,6 +45,7 @@ public class MainMenuActivity extends BaseGameActivity implements
 
 	protected Camera mCamera;
 	protected Scene mMainScene;
+	protected Handler mHandler;
 	private Texture mMenuBackTexture;
 	private TextureRegion mMenuBackTextureRegion;
 	protected MenuScene mStaticMenuScene, mPopUpMenuScene;
@@ -56,14 +60,12 @@ public class MainMenuActivity extends BaseGameActivity implements
 	protected TextureRegion mMenuHelpTextureRegion;
 	private boolean popupDisplayed;
 
-	
 	public Engine onLoadEngine() {
 		this.mCamera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		return new Engine(new EngineOptions(true, ScreenOrientation.PORTRAIT,
 				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT),
 				this.mCamera));
 	}
-
 
 	public void onLoadResources() {
 		/* Load Font/Textures. */
@@ -79,22 +81,18 @@ public class MainMenuActivity extends BaseGameActivity implements
 		this.mMenuBackTexture = new Texture(512, 512,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		this.mMenuBackTextureRegion = TextureRegionFactory.createFromAsset(
-				this.mMenuBackTexture, this, "gfx/Menu/MainMenu.png", 0,
-				0);
+				this.mMenuBackTexture, this, "gfx/Menu/MainMenu.png", 0, 0);
 		this.mEngine.getTextureManager().loadTexture(this.mMenuBackTexture);
 
 		this.mPopUpTexture = new Texture(512, 512,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		this.mPopUpAboutTextureRegion = TextureRegionFactory
-				.createFromAsset(this.mPopUpTexture, this,
-						"gfx/Menu/About_button.png", 0, 0);
-		this.mPopUpQuitTextureRegion = TextureRegionFactory
-				.createFromAsset(this.mPopUpTexture, this,
-						"gfx/Menu/Quit_button.png", 0, 50);
+		this.mPopUpAboutTextureRegion = TextureRegionFactory.createFromAsset(
+				this.mPopUpTexture, this, "gfx/Menu/About_button.png", 0, 0);
+		this.mPopUpQuitTextureRegion = TextureRegionFactory.createFromAsset(
+				this.mPopUpTexture, this, "gfx/Menu/Quit_button.png", 0, 50);
 		this.mEngine.getTextureManager().loadTexture(this.mPopUpTexture);
 		popupDisplayed = false;
 	}
-
 
 	public Scene onLoadScene() {
 		this.mEngine.registerUpdateHandler(new FPSLogger());
@@ -116,7 +114,6 @@ public class MainMenuActivity extends BaseGameActivity implements
 
 		return this.mMainScene;
 	}
-
 
 	public void onLoadComplete() {
 	}
@@ -142,7 +139,6 @@ public class MainMenuActivity extends BaseGameActivity implements
 		}
 	}
 
-
 	public boolean onMenuItemClicked(final MenuScene pMenuScene,
 			final IMenuItem pMenuItem, final float pMenuItemLocalX,
 			final float pMenuItemLocalY) {
@@ -152,12 +148,10 @@ public class MainMenuActivity extends BaseGameActivity implements
 					Toast.LENGTH_SHORT).show();
 			return true;
 		case MENU_QUIT:
-
 			this.finish();
 			return true;
 		case MENU_PLAY:
-			Toast.makeText(MainMenuActivity.this, "Play selected",
-					Toast.LENGTH_SHORT).show();
+			mHandler.postDelayed(mLaunchGameTask, 1000);
 			return true;
 		case MENU_SCORES:
 			Toast.makeText(MainMenuActivity.this, "Scores selected",
@@ -224,5 +218,13 @@ public class MainMenuActivity extends BaseGameActivity implements
 		this.mPopUpMenuScene.setBackgroundEnabled(false);
 		this.mPopUpMenuScene.setOnMenuItemClickListener(this);
 	}
+
+	private Runnable mLaunchGameTask = new Runnable() {
+		public void run() {
+			Intent myIntent = new Intent(MainMenuActivity.this,
+					GameActivity.class);
+			MainMenuActivity.this.startActivity(myIntent);
+		}
+	};
 
 }

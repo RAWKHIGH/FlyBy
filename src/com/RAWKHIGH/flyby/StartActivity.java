@@ -13,11 +13,8 @@ import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
-import android.os.Bundle;
 import android.os.Handler;
-import android.app.Activity;
 import android.content.Intent;
-import android.view.Menu;
 
 public class StartActivity extends BaseGameActivity {
 
