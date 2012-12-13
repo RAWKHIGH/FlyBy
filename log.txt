@@ -1,0 +1,55 @@
+12-11 18:15:03.278: E/AndEngine(504): You have to add
+12-11 18:15:03.278: E/AndEngine(504): 	<uses-permission android:name="android.permission.WAKE_LOCK"/>
+12-11 18:15:03.278: E/AndEngine(504): to your AndroidManifest.xml !
+12-11 18:15:03.278: E/AndEngine(504): java.lang.SecurityException: Neither user 10035 nor current process has android.permission.WAKE_LOCK.
+12-11 18:15:03.278: E/AndEngine(504): 	at android.os.Parcel.readException(Parcel.java:1322)
+12-11 18:15:03.278: E/AndEngine(504): 	at android.os.Parcel.readException(Parcel.java:1276)
+12-11 18:15:03.278: E/AndEngine(504): 	at android.os.IPowerManager$Stub$Proxy.acquireWakeLock(IPowerManager.java:277)
+12-11 18:15:03.278: E/AndEngine(504): 	at android.os.PowerManager$WakeLock.acquire(PowerManager.java:253)
+12-11 18:15:03.278: E/AndEngine(504): 	at org.anddev.andengine.ui.activity.BaseGameActivity.acquireWakeLock(BaseGameActivity.java:203)
+12-11 18:15:03.278: E/AndEngine(504): 	at org.anddev.andengine.ui.activity.BaseGameActivity.doResume(BaseGameActivity.java:166)
+12-11 18:15:03.278: E/AndEngine(504): 	at org.anddev.andengine.ui.activity.BaseGameActivity.onWindowFocusChanged(BaseGameActivity.java:83)
+12-11 18:15:03.278: E/AndEngine(504): 	at com.android.internal.policy.impl.PhoneWindow$DecorView.onWindowFocusChanged(PhoneWindow.java:2001)
+12-11 18:15:03.278: E/AndEngine(504): 	at android.view.View.dispatchWindowFocusChanged(View.java:3924)
+12-11 18:15:03.278: E/AndEngine(504): 	at android.view.ViewGroup.dispatchWindowFocusChanged(ViewGroup.java:659)
+12-11 18:15:03.278: E/AndEngine(504): 	at android.view.ViewRoot.handleMessage(ViewRoot.java:1968)
+12-11 18:15:03.278: E/AndEngine(504): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+12-11 18:15:03.278: E/AndEngine(504): 	at android.os.Looper.loop(Looper.java:123)
+12-11 18:15:03.278: E/AndEngine(504): 	at android.app.ActivityThread.main(ActivityThread.java:3683)
+12-11 18:15:03.278: E/AndEngine(504): 	at java.lang.reflect.Method.invokeNative(Native Method)
+12-11 18:15:03.278: E/AndEngine(504): 	at java.lang.reflect.Method.invoke(Method.java:507)
+12-11 18:15:03.278: E/AndEngine(504): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:839)
+12-11 18:15:03.278: E/AndEngine(504): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:597)
+12-11 18:15:03.278: E/AndEngine(504): 	at dalvik.system.NativeStart.main(Native Method)
+12-11 18:15:03.328: D/libEGL(504): egl.cfg not found, using default config
+12-11 18:15:03.328: D/libEGL(504): loaded /system/lib/egl/libGLES_android.so
+12-11 18:15:03.418: D/AndEngine(504): onSurfaceCreated
+12-11 18:15:03.418: D/AndEngine(504): RENDERER: Android PixelFlinger 1.4
+12-11 18:15:03.429: D/AndEngine(504): VERSION: OpenGL ES-CM 1.0
+12-11 18:15:03.429: D/AndEngine(504): EXTENSIONS: GL_OES_byte_coordinates GL_OES_fixed_point GL_OES_single_precision GL_OES_read_format GL_OES_compressed_paletted_texture GL_OES_draw_texture GL_OES_matrix_get GL_OES_query_matrix GL_OES_EGL_image GL_OES_compressed_ETC1_RGB8_texture GL_ARB_texture_compression GL_ARB_texture_non_power_of_two GL_ANDROID_user_clip_plane GL_ANDROID_vertex_buffer_object GL_ANDROID_generate_mipmap 
+12-11 18:15:03.438: D/AndEngine(504): EXTENSIONS_VERXTEXBUFFEROBJECTS = false
+12-11 18:15:03.448: D/AndEngine(504): EXTENSIONS_DRAWTEXTURE = true
+12-11 18:15:03.458: D/AndEngine(504): onSurfaceChanged: pWidth=480  pHeight=720
+12-11 18:15:03.568: D/dalvikvm(504): GC_EXTERNAL_ALLOC freed 138K, 52% free 2593K/5379K, external 1625K/2137K, paused 106ms
+12-11 18:15:03.738: D/dalvikvm(504): GC_EXPLICIT freed 9K, 52% free 2584K/5379K, external 1625K/2225K, paused 48ms
+12-11 18:15:03.758: I/ARMAssembler(504): generated scanline__00000077:03515104_00009001_00000000 [131 ipp] (153 ins) at [0x44ccb1e8:0x44ccb44c] in 986594 ns
+12-11 18:15:06.508: D/AndroidRuntime(504): Shutting down VM
+12-11 18:15:06.508: W/dalvikvm(504): threadid=1: thread exiting with uncaught exception (group=0x40015560)
+12-11 18:15:06.538: E/AndroidRuntime(504): FATAL EXCEPTION: main
+12-11 18:15:06.538: E/AndroidRuntime(504): java.lang.IllegalStateException: To enable the MusicManager, check the EngineOptions!
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at org.anddev.andengine.engine.Engine.getMusicManager(Engine.java:236)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at com.RAWKHIGH.flyby.MainMenuActivity.onLoadResources(MainMenuActivity.java:105)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at org.anddev.andengine.ui.activity.BaseGameActivity.doResume(BaseGameActivity.java:158)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at org.anddev.andengine.ui.activity.BaseGameActivity.onWindowFocusChanged(BaseGameActivity.java:83)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at com.android.internal.policy.impl.PhoneWindow$DecorView.onWindowFocusChanged(PhoneWindow.java:2001)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at android.view.View.dispatchWindowFocusChanged(View.java:3924)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at android.view.ViewGroup.dispatchWindowFocusChanged(ViewGroup.java:659)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at android.view.ViewRoot.handleMessage(ViewRoot.java:1968)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at android.os.Looper.loop(Looper.java:123)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at android.app.ActivityThread.main(ActivityThread.java:3683)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at java.lang.reflect.Method.invokeNative(Native Method)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at java.lang.reflect.Method.invoke(Method.java:507)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:839)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:597)
+12-11 18:15:06.538: E/AndroidRuntime(504): 	at dalvik.system.NativeStart.main(Native Method)

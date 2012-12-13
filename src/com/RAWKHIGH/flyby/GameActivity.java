@@ -56,7 +56,7 @@ public class GameActivity extends BaseGameActivity{
 		gen = new Random();
 		this.mCamera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		return new Engine(new EngineOptions(true, ScreenOrientation.PORTRAIT, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), this.mCamera));
-	}
+	} // End onLoadEngine
 
 
 	public void onLoadResources() {
@@ -64,27 +64,21 @@ public class GameActivity extends BaseGameActivity{
 		mGameBackTexture = new Texture(512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		mGameBackTextureRegion = TextureRegionFactory.createFromAsset(this.mGameBackTexture, this, "Gamebk.png", 0, 0);
 		mEngine.getTextureManager().loadTexture(this.mGameBackTexture);
-		
-
-
 		mScrumTexture = new Texture(512, 256, TextureOptions.DEFAULT);
 		mScrumTextureRegion = TextureRegionFactory.createTiledFromAsset(this.mScrumTexture, this, "Obstical.png", 0, 0, 8, 4);
 		mEngine.getTextureManager().loadTexture(this.mScrumTexture);		
-	}
+	} // End onLoadResources
 	
 
 	public Scene onLoadScene() {
 		this.mEngine.registerUpdateHandler(new FPSLogger());
-
 		final Scene scene = new Scene(1);
-
 		final int centerX = (CAMERA_WIDTH - mGameBackTextureRegion.getWidth()) / 2;
 		final int centerY = (CAMERA_HEIGHT - mGameBackTextureRegion.getHeight()) / 2;
 
-
 		final Sprite background = new Sprite(centerX, centerY, mGameBackTextureRegion);
 		scene.getLastChild().attachChild(background);
-
+		
 		final Sprite Player = new Sprite(20.0f, CAMERA_HEIGHT - 40.0f, mPlayerTextureRegion){
 			@Override
 			public boolean onAreaTouched(final TouchEvent pAreaTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
@@ -112,7 +106,66 @@ public class GameActivity extends BaseGameActivity{
 				new RotationModifier(3, 0, 360)
 				)
 		);
+		
+		final Sprite Left = new Sprite(20.0f, CAMERA_HEIGHT - 40.0f, mLeftTextureRegion){
+			@Override
+			public boolean onAreaTouched(final TouchEvent pAreaTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				switch(pAreaTouchEvent.getAction()) {
+				case TouchEvent.ACTION_DOWN:
+					Toast.makeText(GameActivity.this, "Sprite touch DOWN", Toast.LENGTH_SHORT).show();
+					break;
+				case TouchEvent.ACTION_UP:
+					Toast.makeText(GameActivity.this, "Sprite touch UP", Toast.LENGTH_SHORT).show();
+					break;
+				case TouchEvent.ACTION_MOVE:
+					this.setPosition(pAreaTouchEvent.getX() - this.getWidth() / 2, pAreaTouchEvent.getY() - this.getHeight() / 2);
+					break;
+				}
+				return true;
+			}
+		};
+		Player.registerEntityModifier(				
+				new SequenceEntityModifier(
+						new ParallelEntityModifier(
+								new MoveYModifier(3, 0.0f, CAMERA_HEIGHT - 40.0f, EaseQuadOut.getInstance() ),
+								new AlphaModifier(3, 0.0f, 1.0f),
+								new ScaleModifier(3, 0.5f, 1.0f)
+						),
+				new RotationModifier(3, 0, 360)
+				)
+		);
+		
+		final Sprite Right = new Sprite(20.0f, CAMERA_HEIGHT - 40.0f, mRightTextureRegion){
+			@Override
+			public boolean onAreaTouched(final TouchEvent pAreaTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				switch(pAreaTouchEvent.getAction()) {
+				case TouchEvent.ACTION_DOWN:
+					Toast.makeText(GameActivity.this, "Sprite touch DOWN", Toast.LENGTH_SHORT).show();
+					break;
+				case TouchEvent.ACTION_UP:
+					Toast.makeText(GameActivity.this, "Sprite touch UP", Toast.LENGTH_SHORT).show();
+					break;
+				case TouchEvent.ACTION_MOVE:
+					this.setPosition(pAreaTouchEvent.getX() - this.getWidth() / 2, pAreaTouchEvent.getY() - this.getHeight() / 2);
+					break;
+				}
+				return true;
+			}
+		};
+		Player.registerEntityModifier(				
+				new SequenceEntityModifier(
+						new ParallelEntityModifier(
+								new MoveYModifier(3, 0.0f, CAMERA_HEIGHT - 40.0f, EaseQuadOut.getInstance() ),
+								new AlphaModifier(3, 0.0f, 1.0f),
+								new ScaleModifier(3, 0.5f, 1.0f)
+						),
+				new RotationModifier(3, 0, 360)
+				)
+		);
+		
 		scene.registerTouchArea(Player);
+		scene.registerTouchArea(Left);
+		scene.registerTouchArea(Right);
 		scene.setTouchAreaBindingEnabled(true);
 		scene.getLastChild().attachChild(Player);
 
@@ -120,11 +173,11 @@ public class GameActivity extends BaseGameActivity{
 		
        	nEnemy = 0;
 		mHandler.postDelayed(mStartEnemy,5000);
-		return scene;
-	}
+		return scene;	
+	} // End onLoadScene
 
 	public void onLoadComplete() {
-	}
+	} // End onLoadComplete
 	
     private Runnable mStartEnemy = new Runnable() {
         public void run() {
@@ -145,5 +198,5 @@ public class GameActivity extends BaseGameActivity{
         		mHandler.postDelayed(mStartEnemy,5000);
         	}
         }
-     };
-}
+     }; // End mStartEnemy
+} // End GameActivity

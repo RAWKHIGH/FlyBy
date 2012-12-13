@@ -1,6 +1,11 @@
 package com.RAWKHIGH.flyby;
 
+import java.io.IOException;
+
 import javax.microedition.khronos.opengles.GL10;
+
+import org.anddev.andengine.audio.music.Music;
+import org.anddev.andengine.audio.music.MusicFactory;
 import org.anddev.andengine.engine.Engine;
 import org.anddev.andengine.engine.camera.Camera;
 import org.anddev.andengine.engine.options.EngineOptions;
@@ -23,6 +28,7 @@ import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
+import org.anddev.andengine.util.Debug;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -41,7 +47,6 @@ public class MainMenuActivity extends BaseGameActivity implements
 	protected static final int MENU_PLAY = 100;
 	protected static final int MENU_SCORES = MENU_PLAY + 1;
 	protected static final int MENU_OPTIONS = MENU_SCORES + 1;
-	protected static final int MENU_HELP = MENU_OPTIONS + 1;
 
 	protected Camera mCamera;
 	protected Scene mMainScene;
@@ -59,16 +64,17 @@ public class MainMenuActivity extends BaseGameActivity implements
 	protected TextureRegion mMenuOptionsTextureRegion;
 	protected TextureRegion mMenuHelpTextureRegion;
 	private boolean popupDisplayed;
+	private Music myMusic;
 
 	public Engine onLoadEngine() {
 		this.mCamera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		return new Engine(new EngineOptions(true, ScreenOrientation.PORTRAIT,
 				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT),
-				this.mCamera));
-	}
+				this.mCamera).setNeedsSound(true));
+
+	} // End onLoadEngine
 
 	public void onLoadResources() {
-		/* Load Font/Textures. */
 		this.mFontTexture = new Texture(256, 256,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
@@ -92,7 +98,16 @@ public class MainMenuActivity extends BaseGameActivity implements
 				this.mPopUpTexture, this, "gfx/Menu/Quit_button.png", 0, 50);
 		this.mEngine.getTextureManager().loadTexture(this.mPopUpTexture);
 		popupDisplayed = false;
-	}
+
+		MusicFactory.setAssetBasePath("mfx/");
+		try {
+			this.myMusic = MusicFactory.createMusicFromAsset(this.mEngine.getMusicManager(), this, "menu.ogg");
+			this.myMusic.setLooping(true);
+		} catch (final IOException e) {
+			Debug.e(e);
+		}
+	
+	} // End onLoadResources
 
 	public Scene onLoadScene() {
 		this.mEngine.registerUpdateHandler(new FPSLogger());
@@ -100,7 +115,6 @@ public class MainMenuActivity extends BaseGameActivity implements
 		this.createStaticMenuScene();
 		this.createPopUpMenuScene();
 
-		/* Center the background on the camera. */
 		final int centerX = (CAMERA_WIDTH - this.mMenuBackTextureRegion
 				.getWidth()) / 2;
 		final int centerY = (CAMERA_HEIGHT - this.mMenuBackTextureRegion
@@ -111,12 +125,18 @@ public class MainMenuActivity extends BaseGameActivity implements
 				this.mMenuBackTextureRegion);
 		mMainScene.getLastChild().attachChild(menuBack);
 		mMainScene.setChildScene(mStaticMenuScene);
+		
+
 
 		return this.mMainScene;
-	}
+	} // End onLoadScene
 
 	public void onLoadComplete() {
-	}
+		try {
+			this.myMusic.play();
+		} catch (IllegalStateException ex) {
+		}
+	} // End onLoadComplete
 
 	@Override
 	public boolean onKeyDown(final int pKeyCode, final KeyEvent pEvent) {
@@ -137,7 +157,7 @@ public class MainMenuActivity extends BaseGameActivity implements
 		} else {
 			return super.onKeyDown(pKeyCode, pEvent);
 		}
-	}
+	} // End onKeyDown
 
 	public boolean onMenuItemClicked(final MenuScene pMenuScene,
 			final IMenuItem pMenuItem, final float pMenuItemLocalX,
@@ -152,23 +172,16 @@ public class MainMenuActivity extends BaseGameActivity implements
 			return true;
 		case MENU_PLAY:
 			mHandler.postDelayed(mLaunchGameTask, 1000);
-			return true;
 		case MENU_SCORES:
-			Toast.makeText(MainMenuActivity.this, "Scores selected",
-					Toast.LENGTH_SHORT).show();
-			return true;
+			mHandler.postDelayed(mLaunchScoreTask, 1000);
 		case MENU_OPTIONS:
 			Toast.makeText(MainMenuActivity.this, "Options selected",
-					Toast.LENGTH_SHORT).show();
-			return true;
-		case MENU_HELP:
-			Toast.makeText(MainMenuActivity.this, "Help selected",
 					Toast.LENGTH_SHORT).show();
 			return true;
 		default:
 			return false;
 		}
-	}
+	} // End onMenuItemClicked
 
 	protected void createStaticMenuScene() {
 		this.mStaticMenuScene = new MenuScene(this.mCamera);
@@ -190,16 +203,10 @@ public class MainMenuActivity extends BaseGameActivity implements
 		optionsMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA,
 				GL10.GL_ONE_MINUS_SRC_ALPHA);
 		this.mStaticMenuScene.addMenuItem(optionsMenuItem);
-		final IMenuItem helpMenuItem = new ColorMenuItemDecorator(
-				new TextMenuItem(MENU_HELP, mFont, "Help"), 0.5f, 0.5f, 0.5f,
-				1.0f, 0.0f, 0.0f);
-		helpMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA,
-				GL10.GL_ONE_MINUS_SRC_ALPHA);
-		this.mStaticMenuScene.addMenuItem(helpMenuItem);
 		this.mStaticMenuScene.buildAnimations();
 		this.mStaticMenuScene.setBackgroundEnabled(false);
 		this.mStaticMenuScene.setOnMenuItemClickListener(this);
-	}
+	} // End createStaticMenuScene
 
 	protected void createPopUpMenuScene() {
 		this.mPopUpMenuScene = new MenuScene(this.mCamera);
@@ -217,7 +224,7 @@ public class MainMenuActivity extends BaseGameActivity implements
 		this.mPopUpMenuScene.buildAnimations();
 		this.mPopUpMenuScene.setBackgroundEnabled(false);
 		this.mPopUpMenuScene.setOnMenuItemClickListener(this);
-	}
+	} // End createPopUpMenuScene
 
 	private Runnable mLaunchGameTask = new Runnable() {
 		public void run() {
@@ -225,6 +232,14 @@ public class MainMenuActivity extends BaseGameActivity implements
 					GameActivity.class);
 			MainMenuActivity.this.startActivity(myIntent);
 		}
-	};
+	}; // End mLaunchGameTask
 
-}
+	private Runnable mLaunchScoreTask = new Runnable() {
+		public void run() {
+			Intent myIntent = new Intent(MainMenuActivity.this,
+					SQLiteScore.class);
+			MainMenuActivity.this.startActivity(myIntent);
+		}
+	}; // End mLaunchScoreTask
+
+} // End MainMenuActivity
